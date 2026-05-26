@@ -9,6 +9,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -22,6 +23,10 @@ public class Processo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+
+    @NotBlank
+    @Column(nullable = false, unique = true)
+    private String numero;
 
     @NotBlank
     @Column(nullable = false)
@@ -41,13 +46,21 @@ public class Processo {
 
     @NotBlank
     @Column(nullable = false)
-    private LocalDateTime cridadoEm;
+    private String responsavel;
+
+    @NotNull
+    @Column(nullable = false)
+    private LocalDate prazo;
+
+    @NotBlank
+    @Column(nullable = false)
+    private LocalDateTime criadoEm;
 
     private LocalDateTime atualizadoEm;
 
     @PrePersist
     public void prePersist() {
-        this.cridadoEm = LocalDateTime.now();
+        this.criadoEm = LocalDateTime.now();
         this.atualizadoEm = LocalDateTime.now();
         if (this.status == null) {
             this.status = StatusProcesso.EM_ANDAMENTO;

@@ -25,17 +25,17 @@ public class LogProcesso {
     @JoinColumn(name = "processo_id", nullable = false)
     private Processo processo;
 
-    @Enumerated (EnumType.STRING)
+    @Enumerated(EnumType.STRING)
     private StatusProcesso statusAnterior;
 
-    @Enumerated (EnumType.STRING)
-    private StatusProcesso stausNovo;
+    @Enumerated(EnumType.STRING)
+    private StatusProcesso statusNovo;
 
     private String observacao;
 
     private String usuario;
 
-    @Column (nullable = false)
+    @Column(nullable = false)
     private LocalDateTime realizadoEm;
 
     @PrePersist
