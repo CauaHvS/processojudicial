@@ -51,8 +51,7 @@ public class Processo {
     @NotNull
     @Column(nullable = false)
     private LocalDate prazo;
-
-    @NotBlank
+    
     @Column(nullable = false)
     private LocalDateTime criadoEm;
 
