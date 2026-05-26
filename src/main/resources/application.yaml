@@ -4,6 +4,7 @@ spring:
     username: ${DB_USERNAME:postgres}
     password: ${DB_PASSWORD:C@u@S@2026@}
   jpa:
+    open-in-view: false
     hibernate:
       ddl-auto: update
     show-sql: true
