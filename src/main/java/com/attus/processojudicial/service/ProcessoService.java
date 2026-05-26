@@ -81,6 +81,24 @@ public class ProcessoService {
         Processo processo = processoRepository.findById(id)
                 .orElseThrow(() -> new ProcessoNotFoundException(id));
 
+        StringBuilder alteracoes = new StringBuilder();
+
+        if (!processo.getTitulo().equals(dto.getTitulo())) {
+            alteracoes.append(String.format("titulo: '%s' → '%s' | ", processo.getTitulo(), dto.getTitulo()));
+        }
+        if (!processo.getTipo().equals(dto.getTipo())) {
+            alteracoes.append(String.format("tipo: '%s' → '%s' | ", processo.getTipo(), dto.getTipo()));
+        }
+        if (!processo.getResponsavel().equals(dto.getResponsavel())) {
+            alteracoes.append(String.format("responsavel: '%s' → '%s' | ", processo.getResponsavel(), dto.getResponsavel()));
+        }
+        if (!processo.getPrazo().equals(dto.getPrazo())) {
+            alteracoes.append(String.format("prazo: '%s' → '%s' | ", processo.getPrazo(), dto.getPrazo()));
+        }
+        if (!processo.getStatus().equals(dto.getStatus())) {
+            alteracoes.append(String.format("status: '%s' → '%s' | ", processo.getStatus(), dto.getStatus()));
+        }
+
         processo.setTitulo(dto.getTitulo());
         processo.setTipo(dto.getTipo());
         processo.setDescricao(dto.getDescricao());
@@ -89,7 +107,19 @@ public class ProcessoService {
         processo.setStatus(dto.getStatus());
 
         Processo atualizado = processoRepository.save(processo);
-        log.info("Processo ID: {} atualizado com sucesso", id);
+
+        if (!alteracoes.isEmpty()) {
+            LogProcesso logProcesso = LogProcesso.builder()
+                    .processo(atualizado)
+                    .statusAnterior(processo.getStatus())
+                    .statusNovo(dto.getStatus())
+                    .observacao("Campos alterados: " + alteracoes)
+                    .usuario("sistema")
+                    .build();
+            logProcessoRepository.save(logProcesso);
+        }
+
+        log.info("Processo ID: {} atualizado. Alterações: {}", id, alteracoes);
         return toResponseDTO(atualizado);
     }
 
