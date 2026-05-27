@@ -1,8 +1,8 @@
 package com.attus.processojudicial.controller;
 
-
 import com.attus.processojudicial.domain.enums.StatusProcesso;
 import com.attus.processojudicial.dto.AtualizarStatusDTO;
+import com.attus.processojudicial.dto.LogResponseDTO;
 import com.attus.processojudicial.dto.ProcessoRequestDTO;
 import com.attus.processojudicial.dto.ProcessoResponseDTO;
 import com.attus.processojudicial.service.ProcessoService;
@@ -76,5 +76,11 @@ public class ProcessoController {
         log.info("DELETE /api/processos/{} - Deletando processo", id);
         processoService.deletar(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/{id}/logs")
+    public ResponseEntity<List<LogResponseDTO>> buscarLogs(@PathVariable Long id) {
+        log.info("GET /api/processos/{}/logs - Buscando logs", id);
+        return ResponseEntity.ok(processoService.buscarLogs(id));
     }
 }

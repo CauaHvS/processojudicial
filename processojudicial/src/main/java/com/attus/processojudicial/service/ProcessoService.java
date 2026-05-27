@@ -4,6 +4,7 @@ import com.attus.processojudicial.domain.LogProcesso;
 import com.attus.processojudicial.domain.Processo;
 import com.attus.processojudicial.domain.enums.StatusProcesso;
 import com.attus.processojudicial.dto.AtualizarStatusDTO;
+import com.attus.processojudicial.dto.LogResponseDTO;
 import com.attus.processojudicial.dto.ProcessoRequestDTO;
 import com.attus.processojudicial.dto.ProcessoResponseDTO;
 import com.attus.processojudicial.exception.ProcessoJaCadastradoException;
@@ -163,6 +164,23 @@ public class ProcessoService {
                 .findByPrazoBeforeAndStatusNot(LocalDate.now().plusDays(7), StatusProcesso.ENCERRADO)
                 .stream()
                 .map(this::toResponseDTO)
+                .toList();
+    }
+
+    @Transactional(readOnly = true)
+    public List<LogResponseDTO> buscarLogs(Long processoId) {
+        log.info("Buscando logs do processo ID: {}", processoId);
+        return logProcessoRepository.findByProcessoIdOrderByRealizadoEmDesc(processoId)
+                .stream()
+                .map(l -> LogResponseDTO.builder()
+                        .id(l.getId())
+                        .processoId(l.getProcesso().getId())
+                        .statusAnterior(l.getStatusAnterior())
+                        .statusNovo(l.getStatusNovo())
+                        .observacao(l.getObservacao())
+                        .usuario(l.getUsuario())
+                        .realizadoEm(l.getRealizadoEm())
+                        .build())
                 .toList();
     }
 

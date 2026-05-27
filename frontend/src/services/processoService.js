@@ -9,4 +9,5 @@ export const processoService = {
     atualizar: (id, data) => api.put(`/processos/${id}`, data),
     atualizarStatus: (id, data) => api.patch(`/processos/${id}/status`, data),
     deletar: (id) => api.delete(`/processos/${id}`),
+    buscarLogs: (id) => api.get(`/processos/${id}/logs`),
 };
